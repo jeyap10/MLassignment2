@@ -10,7 +10,7 @@ seaborn
 xgboost
 
 #commands:
-python -m pip install xgboost 
-pip install xgboost 
-!pip install xgboost
+#python -m pip install xgboost 
+#pip install xgboost 
+#!pip install xgboost
 
