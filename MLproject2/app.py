@@ -9,12 +9,12 @@ import matplotlib.pyplot as plt
 # -----------------------------
 # 1️ Load Saved Models
 lr = joblib.load("MLproject2/model/logistic.pkl")
-dt = joblib.load("model/decision_tree.pkl")
-knn = joblib.load("model/knn.pkl")
-nb = joblib.load("model/naive_bayes.pkl")
-rf = joblib.load("model/random_forest.pkl")
-xgb = joblib.load("model/xgboost.pkl")
-scaler = joblib.load("model/scaler.pkl")
+dt = joblib.load("MLproject2/model/decision_tree.pkl")
+knn = joblib.load("MLproject2/model/knn.pkl")
+nb = joblib.load("MLproject2/model/naive_bayes.pkl")
+rf = joblib.load("MLproject2/model/random_forest.pkl")
+xgb = joblib.load("MLproject2/model/xgboost.pkl")
+scaler = joblib.load("MLproject2/model/scaler.pkl")
 
 models = {
     "Logistic Regression": lr,
