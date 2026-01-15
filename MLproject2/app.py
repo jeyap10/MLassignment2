@@ -17,7 +17,7 @@ from sklearn.metrics import (
 # Streamlit Page Config
 # --------------------------------------------------
 st.set_page_config(
-    page_title="ML Assignment 2 - Classification Models",
+    page_title="ML Assignment 2 - Classification",
     layout="wide"
 )
 
