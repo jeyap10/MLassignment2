@@ -1,0 +1,16 @@
+#Missing dependencies are the #1 cause of deployment failure. 
+
+Example: 
+streamlit 
+scikit-learn 
+numpy 
+pandas 
+matplotlib 
+seaborn 
+xgboost
+
+#commands:
+python -m pip install xgboost 
+pip install xgboost 
+!pip install xgboost
+
