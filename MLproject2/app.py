@@ -14,7 +14,7 @@ knn = joblib.load("MLproject2/model/knn.pkl")
 nb = joblib.load("MLproject2/model/naive_bayes.pkl")
 rf = joblib.load("MLproject2/model/random_forest.pkl")
 xgb = joblib.load("MLproject2/model/xgboost.pkl")
-scaler = joblib.load("MLproject2/model/scaler.pkl")
+#scaler = joblib.load("MLproject2/model/scaler.pkl")
 
 models = {
     "Logistic Regression": lr,
