@@ -1,20 +1,48 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from sklearn.metrics import accuracy_score, roc_auc_score, precision_score, recall_score, f1_score, matthews_corrcoef, confusion_matrix
-import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    matthews_corrcoef,
+    confusion_matrix,
+    classification_report
+)
 
+# --------------------------------------------------
+# Streamlit Page Config
+# --------------------------------------------------
+st.set_page_config(
+    page_title="ML Assignment 2 - Classification Models",
+    layout="wide"
+)
 
-# -----------------------------
-# 1️ Load Saved Models
-lr = joblib.load("MLproject2/model/logistic.pkl")
-dt = joblib.load("MLproject2/model/decision_tree.pkl")
-knn = joblib.load("MLproject2/model/knn.pkl")
-nb = joblib.load("MLproject2/model/naive_bayes.pkl")
-rf = joblib.load("MLproject2/model/random_forest.pkl")
-xgb = joblib.load("MLproject2/model/xgboost.pkl")
-#scaler = joblib.load("MLproject2/model/scaler.pkl")
+st.title(" ML Assignment 2 – Classification Models Demo")
+st.write("Upload test dataset, select model, and view evaluation metrics.")
+
+# --------------------------------------------------
+# Safe Model Loader
+# --------------------------------------------------
+def load_model(path):
+    try:
+        return joblib.load(path)
+    except Exception as e:
+        st.error(f" Model file missing: {path}")
+        st.stop()
+
+# --------------------------------------------------
+# Load Models
+# --------------------------------------------------
+lr = load_model("model/logistic.pkl")
+dt = load_model("model/decision_tree.pkl")
+knn = load_model("model/knn.pkl")
+nb = load_model("model/naive_bayes.pkl")
+rf = load_model("model/random_forest.pkl")
+xgb = load_model("model/xgboost.pkl")
 
 models = {
     "Logistic Regression": lr,
@@ -25,70 +53,88 @@ models = {
     "XGBoost": xgb
 }
 
-# -----------------------------
-# 2️ App Title
-st.title("Heart Disease Prediction App")
-st.write("Upload a CSV file and select a model to predict heart disease.")
+# --------------------------------------------------
+# Upload Dataset
+# --------------------------------------------------
+st.header(" Upload Test Dataset (CSV)")
 
-# -----------------------------
-# 3️ CSV Upload
-uploaded_file = st.file_uploader("Upload CSV file", type="csv")
+uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
-    st.write("Data Preview:")
+
+    st.subheader(" Dataset Preview")
     st.dataframe(df.head())
 
-    # -----------------------------
-    # 4️ Model Selection Dropdown
-    model_name = st.selectbox("Select Model", list(models.keys()))
+    if "target" not in df.columns:
+        st.error(" Dataset must contain a 'target' column")
+        st.stop()
+
+    X = df.drop(columns=["target"])
+    y_true = df["target"]
+
+    # --------------------------------------------------
+    # Model Selection
+    # --------------------------------------------------
+    st.subheader("⚙️ Select Model")
+    model_name = st.selectbox("Choose a classification model", list(models.keys()))
     model = models[model_name]
 
-    # -----------------------------
-    # 5️ Prediction
-    if st.button("Predict"):
-        # Scale features for scaled models
-        if model_name in ["Logistic Regression", "KNN", "Naive Bayes"]:
-            X_input = scaler.transform(df)
-        else:
-            X_input = df.values
+    # --------------------------------------------------
+    # Prediction
+    # --------------------------------------------------
+    if st.button("🚀 Predict & Evaluate"):
 
-        y_pred = model.predict(X_input)
+        y_pred = model.predict(X.values)
 
-        # Try to get probabilities for AUC
-        try:
-            y_prob = model.predict_proba(X_input)[:, 1]
-        except:
-            y_prob = y_pred  # fallback
-
-        # -----------------------------
-        # 6️ Display Evaluation Metrics (if actual target exists in uploaded CSV)
-        if 'target' in df.columns:
-            y_true = df['target']
-            acc = accuracy_score(y_true, y_pred)
+        # Some models support predict_proba
+        if hasattr(model, "predict_proba"):
+            y_prob = model.predict_proba(X.values)[:, 1]
             auc = roc_auc_score(y_true, y_prob)
-            prec = precision_score(y_true, y_pred)
-            rec = recall_score(y_true, y_pred)
-            f1 = f1_score(y_true, y_pred)
-            mcc = matthews_corrcoef(y_true, y_pred)
-
-            st.subheader("Evaluation Metrics")
-            st.write(f"**Accuracy:** {acc:.3f}")
-            st.write(f"**AUC:** {auc:.3f}")
-            st.write(f"**Precision:** {prec:.3f}")
-            st.write(f"**Recall:** {rec:.3f}")
-            st.write(f"**F1 Score:** {f1:.3f}")
-            st.write(f"**MCC Score:** {mcc:.3f}")
-
-            # -----------------------------
-            # 7️ Confusion Matrix
-            cm = confusion_matrix(y_true, y_pred)
-            st.subheader("Confusion Matrix")
-            fig, ax = plt.subplots()
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-            ax.set_xlabel("Predicted")
-            ax.set_ylabel("Actual")
-            st.pyplot(fig)
         else:
-            st.warning("No 'target' column in CSV. Predictions only will be shown.")
-            st.subheader("Predictions")
-            st.write(y_pred)
+            auc = "N/A"
+
+        # --------------------------------------------------
+        # Metrics
+        # --------------------------------------------------
+        acc = accuracy_score(y_true, y_pred)
+        prec = precision_score(y_true, y_pred, average="weighted")
+        rec = recall_score(y_true, y_pred, average="weighted")
+        f1 = f1_score(y_true, y_pred, average="weighted")
+        mcc = matthews_corrcoef(y_true, y_pred)
+
+        st.subheader("📈 Evaluation Metrics")
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Accuracy", round(acc, 4))
+        col2.metric("Precision", round(prec, 4))
+        col3.metric("Recall", round(rec, 4))
+
+        col4, col5, col6 = st.columns(3)
+        col4.metric("F1 Score", round(f1, 4))
+        col5.metric("MCC", round(mcc, 4))
+        col6.metric("AUC Score", auc if auc == "N/A" else round(auc, 4))
+
+        # --------------------------------------------------
+        # Confusion Matrix
+        # --------------------------------------------------
+        st.subheader("📊 Confusion Matrix")
+        cm = confusion_matrix(y_true, y_pred)
+
+        fig, ax = plt.subplots()
+        ax.imshow(cm)
+        ax.set_xlabel("Predicted Label")
+        ax.set_ylabel("True Label")
+
+        for i in range(cm.shape[0]):
+            for j in range(cm.shape[1]):
+                ax.text(j, i, cm[i, j], ha="center", va="center")
+
+        st.pyplot(fig)
+
+        # --------------------------------------------------
+        # Classification Report
+        # --------------------------------------------------
+        st.subheader("📋 Classification Report")
+        report = classification_report(y_true, y_pred, output_dict=True)
+        st.dataframe(pd.DataFrame(report).transpose())
