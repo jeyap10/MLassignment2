@@ -76,14 +76,14 @@ if uploaded_file is not None:
     # --------------------------------------------------
     # Model Selection
     # --------------------------------------------------
-    st.subheader("⚙️ Select Model")
+    st.subheader(" Select Model")
     model_name = st.selectbox("Choose a classification model", list(models.keys()))
     model = models[model_name]
 
     # --------------------------------------------------
     # Prediction
     # --------------------------------------------------
-    if st.button("🚀 Predict & Evaluate"):
+    if st.button("Final Predict and Evaluate"):
 
         y_pred = model.predict(X.values)
 
@@ -103,7 +103,7 @@ if uploaded_file is not None:
         f1 = f1_score(y_true, y_pred, average="weighted")
         mcc = matthews_corrcoef(y_true, y_pred)
 
-        st.subheader("📈 Evaluation Metrics")
+        st.subheader(" Evaluation Metrics")
 
         col1, col2, col3 = st.columns(3)
         col1.metric("Accuracy", round(acc, 4))
@@ -118,7 +118,7 @@ if uploaded_file is not None:
         # --------------------------------------------------
         # Confusion Matrix
         # --------------------------------------------------
-        st.subheader("📊 Confusion Matrix")
+        st.subheader(" Confusion Matrix")
         cm = confusion_matrix(y_true, y_pred)
 
         fig, ax = plt.subplots()
@@ -135,6 +135,6 @@ if uploaded_file is not None:
         # --------------------------------------------------
         # Classification Report
         # --------------------------------------------------
-        st.subheader("📋 Classification Report")
+        st.subheader(" Classification Report")
         report = classification_report(y_true, y_pred, output_dict=True)
         st.dataframe(pd.DataFrame(report).transpose())
