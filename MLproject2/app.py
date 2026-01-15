@@ -5,6 +5,13 @@ from sklearn.metrics import accuracy_score, roc_auc_score, precision_score, reca
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+def load_model("mlassignment2/MLproject2"):
+    try:
+        return joblib.load(path)
+    except Exception as e:
+        st.error(f"Missing model file: {mlassignment2/MLproject2}")
+        st.stop()
+        
 # -----------------------------
 # 1️ Load Saved Models
 lr = joblib.load("model/logistic.pkl")
