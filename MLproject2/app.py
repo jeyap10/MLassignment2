@@ -37,12 +37,12 @@ def load_model(path):
 # --------------------------------------------------
 # Load Models
 # --------------------------------------------------
-lr = load_model("model/logistic.pkl")
-dt = load_model("model/decision_tree.pkl")
-knn = load_model("model/knn.pkl")
-nb = load_model("model/naive_bayes.pkl")
-rf = load_model("model/random_forest.pkl")
-xgb = load_model("model/xgboost.pkl")
+lr = load_model("MLproject2/model/logistic.pkl")
+dt = load_model("MLproject2/model/decision_tree.pkl")
+knn = load_model("MLproject2/model/knn.pkl")
+nb = load_model("MLproject2/model/naive_bayes.pkl")
+rf = load_model("MLproject2/model/random_forest.pkl")
+xgb = load_model("MLproject2/model/xgboost.pkl")
 
 models = {
     "Logistic Regression": lr,
