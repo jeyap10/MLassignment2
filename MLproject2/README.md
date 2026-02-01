@@ -48,7 +48,7 @@ The objective of this project is to build and compare multiple machine learning 
 ## How to Run
 
 1. Clone the repository.
-2. Install dependencies:
+2. Install dependencies if need :
 
 ```bash
 pip install -r requirements.txt
@@ -59,5 +59,7 @@ pip install -r requirements.txt
 ```bash
 streamlit run app.py
 ```
+or go to this link: https://mlproject2-bbtqmxfg7cekjm5hyp6nnm.streamlit.app/
 
 4. Upload a test CSV file and select a model from the dropdown to see predictions and evaluation metrics.
+
