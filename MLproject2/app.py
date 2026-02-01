@@ -21,7 +21,7 @@ st.set_page_config(
     layout="wide"
 )
 st.title(" Name: Jeya Prakash S") 
- st.title("Bits id: 2024dc04016")
+st.title("Bits id: 2024dc04016")
 st.title(" ML Assignment 2 – Classification Models")
 st.write("Upload test dataset under the github path MLproject2/data you can download the excel file and upload it, select model, and view evaluation metrics.")
 
@@ -84,7 +84,7 @@ if uploaded_file is not None:
     # --------------------------------------------------
     # Prediction
     # --------------------------------------------------
-    if st.button("Final Predict and Evaluate"):
+    if st.button("Final Prediction and Evaluate"):
 
         y_pred = model.predict(X.values)
 
