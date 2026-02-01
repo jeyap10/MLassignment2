@@ -20,9 +20,10 @@ st.set_page_config(
     page_title="ML Assignment 2 - Classification",
     layout="wide"
 )
-
+st.title(" Name: Jeya Prakash S 
+           Bits id: 2024dc04016")
 st.title(" ML Assignment 2 – Classification Models")
-st.write("Upload test dataset under the github path MLproject2/data you can donwload the excel file and upload it, select model, and view evaluation metrics.")
+st.write("Upload test dataset under the github path MLproject2/data you can download the excel file and upload it, select model, and view evaluation metrics.")
 
 # --------------------------------------------------
 # Safe Model Loader
